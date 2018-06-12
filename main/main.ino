@@ -1,11 +1,11 @@
-// Adapted from http://bildr.org/2011/02/cd74hc4067-arduino/
+ // Adapted from http://bildr.org/2011/02/cd74hc4067-arduino/
 
 #include <LiquidCrystal.h>
 #include "MIDIUSB.h"
 
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
-const int rs = 4, en = 5, d4 = 6, d5 = 7, d6 = 8, d7 = 9;
+const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 
@@ -18,7 +18,7 @@ int s3 = 13;
 //Mux in “SIG” pin
 int SIG_pin = 0;
 
-int ACTIVE_POTS = 2;
+int ACTIVE_POTS = 16;
 int MIDI_CHANNEL = 1;
 float MIDI_DIVISOR = 8.06299;
 
@@ -33,6 +33,7 @@ void updateValues() {
   bool updatedScreen = false;
   for(int i = 0; i < ACTIVE_POTS; i ++){
     int newValue = getMIDIValue(readMux(i));
+    
     if (!updatedScreen && newValue != LAST_CHANNEL_VALUES[i]) {
       updatedScreen = true;
       updateScreen(i, newValue);
@@ -107,11 +108,11 @@ void setup() {
   lcd.print("MIDI Controller");
   
   Serial.begin(9600);
+//  Serial.println("Startup");
 }
 
 void loop() {
-  //Loop through and read all 16 values
-  //Reports back Value at channel 6 is: 346
+//  Serial.println("Loop");
   updateValues();
   delay(100);
 }
