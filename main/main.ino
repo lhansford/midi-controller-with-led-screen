@@ -34,12 +34,12 @@ void updateValues() {
   for(int i = 0; i < ACTIVE_POTS; i ++){
     int newValue = getMIDIValue(readMux(i));
     
-    if (!updatedScreen && newValue != LAST_CHANNEL_VALUES[i]) {
+    if (!updatedScreen && newValue != LAST_CHANNEL_VALUES[i] && newValue != LAST_CHANNEL_VALUES[i] - 1 && newValue != LAST_CHANNEL_VALUES[i] + 1) { // The plus/minus 1 prevents update on minor fluctuations.
       updatedScreen = true;
       updateScreen(i, newValue);
+      LAST_CHANNEL_VALUES[i] = newValue;
+      updateMIDI(i, newValue);
     }
-    LAST_CHANNEL_VALUES[i] = newValue;
-    updateMIDI(i, newValue);
 //    Serial.println("===");
 //    Serial.println(i);
 //    Serial.println(LAST_CHANNEL_VALUES[i]);
@@ -65,20 +65,20 @@ int readMux(int channel) {
   int controlPin[] = {s0, s1, s2, s3};
   int muxChannel[16][4]={
     {0,0,0,0}, //channel 0
-    {1,0,0,0}, //channel 1
-    {0,1,0,0}, //channel 2
-    {1,1,0,0}, //channel 3
-    {0,0,1,0}, //channel 4
-    {1,0,1,0}, //channel 5
-    {0,1,1,0}, //channel 6
-    {1,1,1,0}, //channel 7
     {0,0,0,1}, //channel 8
-    {1,0,0,1}, //channel 9
-    {0,1,0,1}, //channel 10
-    {1,1,0,1}, //channel 11
+    {0,0,1,0}, //channel 4
     {0,0,1,1}, //channel 12
+    {1,0,0,0}, //channel 1
+    {1,0,0,1}, //channel 9
+    {1,0,1,0}, //channel 5
     {1,0,1,1}, //channel 13
+    {0,1,0,0}, //channel 2
+    {0,1,0,1}, //channel 10
+    {0,1,1,0}, //channel 6
     {0,1,1,1}, //channel 14
+    {1,1,0,0}, //channel 3
+    {1,1,0,1}, //channel 11
+    {1,1,1,0}, //channel 7
     {1,1,1,1} //channel 15
    };
    //loop through the 4 sig
